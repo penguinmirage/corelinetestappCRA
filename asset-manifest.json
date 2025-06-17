@@ -1,13 +1,11 @@
 {
   "files": {
-    "main.css": "/corelinetestappCRA/static/css/main.7947a2f8.css",
-    "main.js": "/corelinetestappCRA/static/js/main.4f1e7b19.js",
-    "index.html": "/corelinetestappCRA/index.html",
-    "main.7947a2f8.css.map": "/corelinetestappCRA/static/css/main.7947a2f8.css.map",
-    "main.4f1e7b19.js.map": "/corelinetestappCRA/static/js/main.4f1e7b19.js.map"
+    "main.css": "/corelinetestappCRA/static/css/main.c9742256.css",
+    "main.js": "/corelinetestappCRA/static/js/main.ef39c040.js",
+    "index.html": "/corelinetestappCRA/index.html"
   },
   "entrypoints": [
-    "static/css/main.7947a2f8.css",
-    "static/js/main.4f1e7b19.js"
+    "static/css/main.c9742256.css",
+    "static/js/main.ef39c040.js"
   ]
 }
