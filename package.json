@@ -31,7 +31,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://penguinmirage.github.io/corelinetestapp/cra-version",
+  "homepage": "https://penguinmirage.github.io/corelinetestappCRA",
   "eslintConfig": {
     "extends": [
       "react-app",

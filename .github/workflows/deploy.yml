@@ -2,9 +2,9 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-deploy:
@@ -26,20 +26,18 @@ jobs:
         with:
           node-version: "18"
           cache: "npm"
-          cache-dependency-path: "corelinecra/package-lock.json"
+          cache-dependency-path: "package-lock.json"
 
       - name: Cache node modules
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('corelinecra/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: |
-          cd corelinecra
-          npm ci --prefer-offline --no-audit
+        run: npm ci --prefer-offline --no-audit
 
       - name: Build
         env:
@@ -47,15 +45,13 @@ jobs:
           REACT_APP_MOCK_API: true
           REACT_APP_API_DELAY_MS: 1000
           CI: false
-        run: |
-          cd corelinecra
-          npm run build
+        run: npm run build
 
       - name: Upload artifact
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v2
         with:
-          path: ./corelinecra/build
+          path: ./build
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/main'
