@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/corelinetestapp/cra-version/static/css/main.7947a2f8.css",
+    "main.js": "/corelinetestapp/cra-version/static/js/main.b41b3c0d.js",
+    "index.html": "/corelinetestapp/cra-version/index.html",
+    "main.7947a2f8.css.map": "/corelinetestapp/cra-version/static/css/main.7947a2f8.css.map",
+    "main.b41b3c0d.js.map": "/corelinetestapp/cra-version/static/js/main.b41b3c0d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7947a2f8.css",
+    "static/js/main.b41b3c0d.js"
+  ]
+}
