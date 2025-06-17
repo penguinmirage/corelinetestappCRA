@@ -227,6 +227,8 @@ class ApiService {
         ? `/api/archive/v1/${year}/${formattedMonth}.json?api-key=${this.config.apiKey}`
         : apiUrl;
 
+    console.log(`📡 Fetching NY Times archive for ${year}/${formattedMonth}`);
+
     try {
       const data = await this.makeRequest(requestUrl);
 
@@ -240,12 +242,40 @@ class ApiService {
         !apiResponse.response ||
         !("docs" in apiResponse.response)
       ) {
+        console.error("Invalid API response structure:", apiResponse);
         throw new Error("Invalid API response structure");
       }
 
-      return data as NYTimesArchiveResponse;
+      const response = data as NYTimesArchiveResponse;
+      const articleCount = response.response.docs.length;
+      const validArticles = response.response.docs.filter(
+        (article) => article.web_url && article.web_url.includes("nytimes.com"),
+      ).length;
+
+      console.log(
+        `✅ Successfully fetched ${articleCount} articles (${validArticles} with valid NY Times URLs)`,
+      );
+
+      return response;
     } catch (error) {
       console.error("Real API call failed:", error);
+
+      if (error instanceof Error) {
+        if (error.message.includes("401")) {
+          throw new Error(
+            "Invalid API key or unauthorized access. Please check your NY Times API key.",
+          );
+        } else if (error.message.includes("429")) {
+          throw new Error(
+            "Rate limit exceeded. Please wait before making more requests.",
+          );
+        } else if (error.message.includes("403")) {
+          throw new Error(
+            "Access forbidden. Please ensure the Archive API is enabled in your NY Times developer account.",
+          );
+        }
+      }
+
       throw new Error(
         `Failed to fetch news from NY Times API: ${error instanceof Error ? error.message : "Unknown error"}`,
       );
@@ -258,7 +288,7 @@ class ApiService {
   ): Promise<NYTimesArchiveResponse> {
     try {
       if (this.config.useMock) {
-        console.log("Using mock data for news");
+        console.log("🎭 Using mock data for news");
         const articles = this.generateMockNews(year, month);
 
         return {
@@ -275,20 +305,20 @@ class ApiService {
           },
         };
       } else {
-        console.log("Fetching real news from NY Times API");
+        console.log("🌐 Fetching real news from NY Times API");
         return await this.fetchRealNews(year, month);
       }
     } catch (error) {
-      console.error("Error in getArchiveNews:", error);
+      console.error("❌ Error in getArchiveNews:", error);
 
       if (!this.config.useMock) {
-        console.log("Falling back to mock data due to API error");
+        console.log("⚠️ Falling back to mock data due to API error");
         const articles = this.generateMockNews(year, month);
 
         return {
           status: "OK",
           copyright:
-            "Copyright (c) 2024 The New York Times Company. All Rights Reserved.",
+            "Copyright (c) 2024 The New York Times Company. All Rights Reserved. (Fallback Mode)",
           response: {
             docs: articles,
             meta: {
@@ -314,18 +344,21 @@ class ApiService {
 
   async testConnection(): Promise<boolean> {
     if (this.config.useMock) {
+      console.log("🎭 Mock mode enabled - connection test skipped");
       return true;
     }
 
     try {
+      console.log("🔍 Testing NY Times API connection...");
       const currentDate = new Date();
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth() + 1;
 
       await this.fetchRealNews(year, month);
+      console.log("✅ API connection test successful");
       return true;
     } catch (error) {
-      console.error("API connection test failed:", error);
+      console.error("❌ API connection test failed:", error);
       return false;
     }
   }

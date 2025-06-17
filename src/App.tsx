@@ -4,6 +4,7 @@ import Header from "./components/header-component";
 import SidebarMenu from "./components/sidebar-menu";
 import NewsList from "./components/news-list";
 import Footer from "./components/footer";
+import ApiStatus from "./components/api-status";
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -22,6 +23,7 @@ function App() {
       <SidebarMenu isOpen={isSidebarOpen} onClose={handleSidebarClose} />
       <MainContent>
         <ContentWrapper>
+          {process.env.NODE_ENV === "development" && <ApiStatus />}
           <NewsList />
         </ContentWrapper>
         <Footer />
